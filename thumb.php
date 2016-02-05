@@ -36,7 +36,7 @@ function WikiGalleryThumbnail( $pagename, $auth = "read" ) {
 
     // group exists?
     if( !isset( $WikiGalleryThumbProviders[$group] ) ) Abort("Invalid gallery group \"$group\" given");
-    $provider =& $WikiGalleryThumbProviders[$group];
+    $provider = $WikiGalleryThumbProviders[$group];
 
     // get size
     $width = intval(@$_GET["width"]);
@@ -66,7 +66,7 @@ class ThumbProvider {
     function ThumbProvider( $group ) {
         global $WikiGalleryThumbProviders;
         $this->group = $group;
-        $WikiGalleryThumbProviders[$group] =& $this;
+        $WikiGalleryThumbProviders[$group] = $this;
     }
 
     function getGroup() {
@@ -135,12 +135,12 @@ class InternalThumbProvider extends ThumbProvider {
             // clean up, but not too often
             if( time()-filemtime($this->cleanupTimestamp )>$WikiGallery_CleanupInterval ) {
                 //    WikiGalleryCleanupCache();
-                register_shutdown_function( 'WikiGalleryCleanupCache', &$this, getcwd() );
+                register_shutdown_function( 'WikiGalleryCleanupCache', $this, getcwd() );
             }
         }
     }
 
-    function thumbUrl( $path, $width, $height, $resizeMode ) {
+    function thumbUrl( $path, $width, $height, $resizeMode="" ) {
         global $WikiGallery_UseAuthorization, $pagename;
         // we can use a direct url to the file if authorization is not needed
         if( !$WikiGallery_UseAuthorization ) {
@@ -203,7 +203,7 @@ class InternalThumbProvider extends ThumbProvider {
         // libgd2 installed?
         $info = @gd_info();
         if( !$info ) return;
-        $version = ereg_replace('[[:alpha:][:space:]()]+', '', $info['GD Version']);
+        $version = preg_replace('/[[:alpha:][:space:]()]+/', '', $info['GD Version']);
         if( !$version>=2 ) return;
     
         // get file format
