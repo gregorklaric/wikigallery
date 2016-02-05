@@ -24,7 +24,9 @@
 
 require_once( "tools.php" );
 
-$RecipeInfo['WikiGallery']['Version'] = '$Rev$';
+
+
+$RecipeInfo['WikiGallery']['Version'] = '$Rev: 68 $';
 
 // Paths
 SDV($WikiGallery_PicturesWebPath, "pictures/"); // the path to the galleries (relative to the host url http://foo.com/)
@@ -41,8 +43,8 @@ SDV($WikiGallery_PhpThumb, WikiGalleryLeadingComponents($PubDirUrl) . "/phpThumb
 SDV($WikiGallery_NavThumbnailColumns, 5); // odd number
 SDV($WikiGallery_SortByDate, FALSE ); // otherwise alphabetical
 SDV($WikiGallery_SortBackwards, FALSE );
-SDV($WikiGallery_AlbumsSortByDate, TRUE ); // otherwise alphabetical
-SDV($WikiGallery_AlbumsSortBackwards, TRUE );
+SDV($WikiGallery_AlbumsSortByDate, FALSE ); // otherwise alphabetical
+SDV($WikiGallery_AlbumsSortBackwards, FALSE );
 SDV($WikiGallery_DefaultSlideshowDelay, 5 );
 
 // Thumbnail generation
@@ -82,7 +84,7 @@ Markup('(:gallerypicturerandom group? width?:height? album:)',
        'WikiGalleryPicture( \'$2\',\'$3\',\'$4\',\'$5\',\'$6\', true)');
 
 function WikiGalleryPicture( $group, $width, $height, $resizeMode, $path, $random=false ) {
-    $pagestore =& WikiGalleryPageStore( $group );
+    $pagestore = WikiGalleryPageStore( $group );
     return $pagestore->picture( $width, $height, $resizeMode, $path, $random );
 }
 
@@ -107,17 +109,17 @@ $FmtPV['$GalleryPrevPicture'] = 'WikiGalleryNeighbourPicture("$group","$name",-1
 $FmtPV['$GalleryPrevPrevPicture'] = 'WikiGalleryNeighbourPicture("$group","$name",-2)';
 
 function WikiGalleryParent( $group, $name ) {
-    $pagestore =& WikiGalleryPageStore( $group );
+    $pagestore = WikiGalleryPageStore( $group );
     return $pagestore->parent( $name );
 }
 
 function WikiGalleryNeighbourPage( $group, $name, $dist ) {
-    $pagestore =& WikiGalleryPageStore( $group );
+    $pagestore = WikiGalleryPageStore( $group );
     return $pagestore->neighbourPicturePage( $name, $dist );
 }
 
 function WikiGalleryNeighbourPicture( $group, $name, $dist ) {
-    $pagestore =& WikiGalleryPageStore( $group );
+    $pagestore = WikiGalleryPageStore( $group );
     return $pagestore->neighbourPicture( $name, $dist );
 }
 
@@ -148,7 +150,7 @@ function &WikiGalleryDefaultPageStore() {
 }
 
 // default pages
-$WikiLibDirs[] =& new PageStore("$FarmD/cookbook/wikigallery/wikilib.d/\$FullName");
+$WikiLibDirs[] = new PageStore("$FarmD/cookbook/wikigallery/wikilib.d/\$FullName");
 
 // which files?
 $WikiGallery_ImgExts = '\.jpg$|\.jpeg$|\.jpe$|\.png$|\.bmp$';
@@ -237,15 +239,15 @@ class GalleryPageStore extends PageStore {
         global $WikiGallery_PicturesBasePath, $WikiGallery_PicturesWebPath, 
             $WikiGallery_Register, $WikiGallery_DefaultGroup;
 
-        $WikiGallery_Register[$galleryGroup] =& $this;
+        $WikiGallery_Register[$galleryGroup] = $this;
         $WikiGallery_DefaultGroup = $galleryGroup;
 
         $this->PageStore( $WikiGallery_PicturesBasePath );
         $this->galleryGroup = $galleryGroup;
         if( $provider ) 
-            $this->provider =& $provider; 
+            $this->provider = $provider; 
         else
-            $this->provider =& 
+            $this->provider = 
                 new GalleryDirectoryProvider( $galleryGroup, 
                                               $WikiGallery_PicturesBasePath, 
                                               $WikiGallery_PicturesWebPath );   
