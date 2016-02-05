@@ -37,9 +37,9 @@ class GalleryDirectoryProvider extends GalleryProvider {
     $this->directoryBasePath = $basePath;
     $this->directoryWebPath = $webPath;
     if( $thumbProvider )
-      $this->thumbProvider =& $thumbProvider;
+      $this->thumbProvider = $thumbProvider;
     else
-      $this->thumbProvider =& 
+      $this->thumbProvider = 
 	new InternalThumbProvider( $group, 
 				   $WikiGallery_CacheBasePath, 
 				   $WikiGallery_CacheWebPath, 
@@ -132,7 +132,7 @@ class GalleryDirectoryProvider extends GalleryProvider {
       
       // and include images
       if( is_readable($pathslash.$file) &&
-	  (($albums==false && is_file($pathslash.$file) && eregi($WikiGallery_ImgExts, $file)) ||
+	  (($albums==false && is_file($pathslash.$file) && preg_match("/".$WikiGallery_ImgExts."/i", $file)) ||
 	   ($albums==true && is_dir($pathslash.$file)))) {
 	$mod_date = filemtime($pathslash.$file).$i;
 	$img_files[$mod_date] = $file;
